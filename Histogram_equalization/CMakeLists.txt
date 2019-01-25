@@ -14,3 +14,4 @@ ENDIF()
 include_directories(${Caffe_INCLUDE_DIRS})
 ADD_EXECUTABLE(Hequlization main.cpp)
 target_link_libraries(Hequlization ${OpenCV_LIBS})
+
