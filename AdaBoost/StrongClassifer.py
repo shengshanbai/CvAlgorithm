@@ -84,7 +84,7 @@ class StrongClassifer:
         if not self.classifers:#当前没有分类器
             return False
         #对不同的beta条件，测试当前分类器是否达到目标
-        for beta in np.arange(1.0,0,-0.02):
+        for beta in np.arange(1.0,0.01,-0.01):
             sumFeature=np.zeros(tag.shape)
             for classifer in self.classifers:
                 sumFeature+=classifer.predict(integralMap)
