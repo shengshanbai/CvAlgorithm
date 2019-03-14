@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.4.1)
 project (Histogram_equalization)
 IF (CMAKE_SYSTEM_NAME MATCHES "Windows")
-set(OpenCV_DIR E:\\Projects\\cpp\\opencv\\build\\x64\\vc15\\lib)
+set(OpenCV_DIR D:\\libs\\opencv\\build\\x64\\vc15\\lib)
 ENDIF()
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})

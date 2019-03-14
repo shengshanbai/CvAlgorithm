@@ -1,7 +1,0 @@
-LABEL_POSITIVE = +1
-LABEL_NEGATIVE = 0
-NON_FACE_COUNT=12000
-IMAGE_SIZE=(19,19)
-FACE_TRAIN_INTMAP="AdaBoost/faceTrainIntMap.npy"
-FACE_VALID_INTMAP="AdaBoost/faceValidIntMap.npy"
-CASCADE_FILE="AdaBoost/cascade.json"
