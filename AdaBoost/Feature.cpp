@@ -38,9 +38,9 @@ void Feature::draw(cv::Mat& image)
 double Feature::calc(cv::Mat& sum)
 {
 	double result = 0;
-	for (WeightRect& wRect:rect)
+	for (WeightRect& wRect : rect)
 	{
-		if (wRect.weight!=0)
+		if (wRect.weight != 0)
 		{
 			result += wRect.weight*(sum.at<int>(wRect.r.y, wRect.r.x) + sum.at<int>(wRect.r.y + wRect.r.height, wRect.r.x + wRect.r.width) - sum.at<int>(wRect.r.y + wRect.r.height, wRect.r.x) - sum.at<int>(wRect.r.y, wRect.r.x + wRect.r.width));
 		}

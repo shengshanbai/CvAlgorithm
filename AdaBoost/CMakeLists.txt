@@ -12,5 +12,10 @@ ELSE()
 find_package(Caffe REQUIRED)
 ENDIF()
 include_directories(${Caffe_INCLUDE_DIRS})
-ADD_EXECUTABLE(vjboost main.cpp Feature.cpp)
+
+file(GLOB vjboost_SRC
+    "*.h"
+    "*.cpp"
+)
+ADD_EXECUTABLE(vjboost ${vjboost_SRC})
 target_link_libraries(vjboost ${OpenCV_LIBS})
