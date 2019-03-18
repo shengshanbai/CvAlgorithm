@@ -10,6 +10,8 @@ public:
 	~FeatureManager();
 	void init(int _posCount,int _negCount);
 	void setImage(cv::Mat& image,char label,int index);
+	void preCacheData(int indexCacheSize);
+	void clearCacheData() { indexCacheCount = 0; }
 	float calcDelta(cv::Mat& sum,cv::Mat& sumsq,cv::Rect& area);
 	int getFeatureCount() { return allFeatures.size(); }
 	void getSortedSample(int featureIdx,cv::Mat& sorted);
@@ -24,7 +26,9 @@ private:
 	cv::Mat sumMat;
 	cv::Mat labelMat;
 	cv::Mat deltaMat;
+	cv::Mat preIndexCache;
 	int winWidth;
 	int winHeight;
 	int posCount, negCount;
+	int indexCacheCount=0;
 };

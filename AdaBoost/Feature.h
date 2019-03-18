@@ -12,7 +12,7 @@ public:
 	~Feature();
 	//»­³öfeatureÓÃÓÚ²âÊÔ
 	void draw(cv::Mat& image);
-	double calc(cv::Mat& sum);
+	double calc(cv::Mat& sum) const;
 private:
 	struct WeightRect
 	{

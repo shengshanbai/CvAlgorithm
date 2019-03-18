@@ -35,10 +35,10 @@ void Feature::draw(cv::Mat& image)
 	}
 }
 
-double Feature::calc(cv::Mat& sum)
+double Feature::calc(cv::Mat& sum) const
 {
 	double result = 0;
-	for (WeightRect& wRect : rect)
+	for (const WeightRect& wRect : rect)
 	{
 		if (wRect.weight != 0)
 		{

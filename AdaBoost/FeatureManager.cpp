@@ -35,6 +35,79 @@ void FeatureManager::setImage(cv::Mat & image,char label,int index)
 	deltaMat.at<float>(0, index) = calcDelta(sum, sumSq, Rect(0,0,winWidth, winHeight));
 }
 
+//根据feature排序
+class FSort
+{
+public:
+	FSort(cv::AutoBuffer<float>& _fbuf) :fbuf(_fbuf)
+	{
+	}
+	bool operator()(ushort& a, ushort& b) const {
+		return fbuf[a] < fbuf[b];
+	}
+	cv::AutoBuffer<float>& fbuf;
+};
+
+
+class PreIndexSort : public ParallelLoopBody {
+public:
+	PreIndexSort(cv::Mat& _sortedIndex,int _sampleCount,
+		std::vector<Feature>& _allFeatures,
+		cv::Mat& _sumMat,
+		cv::Mat& _deltaMat,
+		int _winWidth,
+		int _winHeight):sortedIndex(_sortedIndex),
+		allFeatures(_allFeatures),
+		sampleCount(_sampleCount),
+		sumMat(_sumMat),
+		deltaMat(_deltaMat),
+		winWidth(_winWidth),
+		winHeight(_winHeight){}
+	void operator()(const Range& range) const
+	{
+		for (int fi = range.start; fi < range.end; ++fi)
+		{
+			ushort* rowData = sortedIndex.ptr<ushort>(fi);
+			for (ushort i = 0; i < sampleCount; i++)
+			{
+				rowData[i] = i;
+			}
+			const Feature& feature = allFeatures[fi];
+			cv::AutoBuffer<float> fValueBuf(sampleCount);
+			//计算所有sample的feature
+			for (int si = 0; si < sampleCount; si++)
+			{
+				cv::Mat sum(winHeight + 1, winWidth + 1, CV_32SC1, sumMat.ptr<int>(si));
+				float fValue = feature.calc(sum) / deltaMat.at<float>(0, si);
+				fValueBuf[si] = fValue;
+			}
+			std::sort(rowData, rowData + sampleCount, FSort(fValueBuf));
+		}
+	}
+	cv::Mat& sortedIndex;
+	int sampleCount;
+	std::vector<Feature> allFeatures;
+	cv::Mat& sumMat;
+	cv::Mat& deltaMat;
+	int winWidth;
+	int winHeight;
+};
+
+/*
+提前计算好缓存数据，可以加速计算
+indexCacheSize:缓存的排序cache大小，单位是MB。
+*/
+void FeatureManager::preCacheData(int indexCacheSize)
+{
+	long cacheByte = indexCacheSize * 1024 * 1024;
+	int sampleCount = posCount + negCount;
+	long rowSize = sampleCount * sizeof(ushort);
+	int featureCount = getFeatureCount();
+	indexCacheCount = cacheByte / rowSize > featureCount ? featureCount : cacheByte / rowSize;
+	preIndexCache.create(indexCacheCount, sampleCount, CV_16UC1);
+	parallel_for_(Range(0, indexCacheCount), PreIndexSort(preIndexCache, sampleCount, allFeatures, sumMat, deltaMat, winWidth, winHeight));
+}
+
 //根据积分图计算指定区域的delta值
 float FeatureManager::calcDelta(cv::Mat & sum, cv::Mat & sumsq, cv::Rect & area)
 {
@@ -46,21 +119,14 @@ float FeatureManager::calcDelta(cv::Mat & sum, cv::Mat & sumsq, cv::Rect & area)
 	return sqrt(N*sumSq - sumV * sumV) / N;
 }
 
-//根据feature排序
-class FSort
-{
-public:
-	FSort(cv::AutoBuffer<float>& _fbuf):fbuf(_fbuf)
-	{
-	}
-	bool operator()(ushort& a,ushort& b) const {
-		return fbuf[a] < fbuf[b];
-	}
-	cv::AutoBuffer<float>& fbuf;
-};
-
 void FeatureManager::getSortedSample(int featureIdx, cv::Mat & sorted)
 {
+	//使用缓存
+	if (featureIdx<indexCacheCount)
+	{
+		sorted = preIndexCache.row(featureIdx);
+		return;
+	}
 	int sampleCount = posCount + negCount;
 	sorted.create(1, sampleCount, CV_16UC1);
 	for (ushort i = 0; i < sampleCount; i++)
