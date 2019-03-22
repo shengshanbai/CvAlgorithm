@@ -1,4 +1,5 @@
-cmake_minimum_required (VERSION 3.4.1)
+﻿cmake_minimum_required (VERSION 3.4.1)
+
 project (vjboost)
 IF (CMAKE_SYSTEM_NAME MATCHES "Windows")
 set(OpenCV_DIR D:\\libs\\opencv\\build\\x64\\vc15\\lib)

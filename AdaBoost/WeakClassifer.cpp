@@ -1,4 +1,4 @@
-#include "WeakClassifer.h"
+ï»¿#include "WeakClassifer.h"
 #include <limits>
 #include <mutex>
 
@@ -40,7 +40,7 @@ public:
 		{
 			Mat sortedSample;
 			featureManager.getSortedSample(fi, sortedSample);
-			//Ñ°ÕÒ×î¼ÑÇĞ·Öµã
+			//å¯»æ‰¾æœ€ä½³åˆ‡åˆ†ç‚¹
 			double posAcc = 0, negAcc = 0;
 			for (int i = 0; i < sampleCount; i++)
 			{
@@ -69,7 +69,7 @@ public:
 						featureId = fi;
 					}
 				}
-				char label = featureManager.getLable(index);
+				int label = featureManager.getLable(index);
 				if (label == 1)
 				{
 					posAcc += weight.at<double>(0, index);
@@ -97,22 +97,55 @@ bool WeakClassifer::train(double posSumW, double negSumW, cv::Mat & weight, Feat
 {
 	pfmanager = &featureManager;
 	int featureCount = featureManager.getFeatureCount();
-	//¶ÔÃ¿¸öfeature½øĞĞ´¦Àí
+	//å¯¹æ¯ä¸ªfeatureè¿›è¡Œå¤„ç†
 	double minErr = std::numeric_limits<double>::max();
 	std::mutex lock;
 	parallel_for_(Range(0, featureCount), PickBestFeature(minErr,featureId,
 		polarity,threshold,featureManager,posSumW,negSumW,weight,lock));
-	cout << "the minErr:" << minErr << endl;
 	feature = featureManager.getFeature(featureId);
 	beta = minErr / (1 - minErr);
 	alpha = log(1 / beta);
+	cout << " the minErr:" << minErr
+		<< " threshold:" << threshold
+		<< " polarity:" << polarity
+		<<" alpha:"<< alpha <<endl;
 	return true;
 }
 
-char WeakClassifer::predict(int sampleIdx)
+int WeakClassifer::predict(int sampleIdx)
 {
 	Mat sum;
 	float fvalue=pfmanager->getFeatureValue(featureId,sampleIdx);
+	if (polarity*fvalue < polarity*threshold)
+	{
+		return 1;
+	}
+	return 0;
+}
+
+void WeakClassifer::save(cv::FileStorage & fs)
+{
+	fs << "polarity" << polarity;
+	fs << "threshold" << threshold;
+	fs << "alpha" << alpha;
+	fs << "feature" << "{";
+	feature.save(fs);
+	fs << "}";
+}
+
+void WeakClassifer::load(cv::FileNode & fnode)
+{
+	fnode["polarity"] >> polarity;
+	fnode["threshold"] >> threshold;
+	fnode["alpha"] >> alpha;
+	FileNode node = fnode["feature"];
+	feature.load(node);
+}
+
+int WeakClassifer::predict(cv::Mat& sum, cv::Mat& sumSq, cv::Rect2f detect, float sizeScale)
+{
+	Feature scaleFature = feature * sizeScale;
+	float fvalue= scaleFature.computeNormalFeature(sum, sumSq, detect)/(sizeScale*sizeScale);
 	if (polarity*fvalue < polarity*threshold)
 	{
 		return 1;

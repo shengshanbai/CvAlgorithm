@@ -1,4 +1,4 @@
-#include "FeatureManager.h"
+ï»¿#include "FeatureManager.h"
 #include <cmath>
 #include <algorithm>
 
@@ -21,21 +21,22 @@ void FeatureManager::init(int _posCount, int _negCount)
 	posCount = _posCount;
 	negCount = _negCount;
 	int sampleCount = posCount + negCount;
-	labelMat.create(1,sampleCount,CV_8SC1);
+	labelMat.create(1,sampleCount,CV_32SC1);
 	sumMat.create(sampleCount,(winWidth+1)*(winHeight+1),CV_32SC1);
 	deltaMat.create(1,sampleCount,CV_32FC1);
 }
 
-void FeatureManager::setImage(cv::Mat & image,char label,int index)
+
+void FeatureManager::setImage(cv::Mat & image,int label,int index)
 {
-	labelMat.at<char>(0, index) = label;
+	labelMat.at<int>(0, index) = label;
 	Mat sum(winHeight + 1, winWidth + 1,CV_32SC1,sumMat.ptr<int>(index));
 	Mat sumSq;
 	cv::integral(image, sum, sumSq);
-	deltaMat.at<float>(0, index) = calcDelta(sum, sumSq, Rect(0,0,winWidth, winHeight));
+	deltaMat.at<float>(0, index) = FeatureManager::calcDelta(sum, sumSq, Rect(0,0,winWidth, winHeight));
 }
 
-//¸ù¾İfeatureÅÅĞò
+//æ ¹æ®featureæ’åº
 class FSort
 {
 public:
@@ -74,7 +75,7 @@ public:
 			}
 			const Feature& feature = allFeatures[fi];
 			cv::AutoBuffer<float> fValueBuf(sampleCount);
-			//¼ÆËãËùÓĞsampleµÄfeature
+			//è®¡ç®—æ‰€æœ‰sampleçš„feature
 			for (int si = 0; si < sampleCount; si++)
 			{
 				cv::Mat sum(winHeight + 1, winWidth + 1, CV_32SC1, sumMat.ptr<int>(si));
@@ -94,8 +95,8 @@ public:
 };
 
 /*
-ÌáÇ°¼ÆËãºÃ»º´æÊı¾İ£¬¿ÉÒÔ¼ÓËÙ¼ÆËã
-indexCacheSize:»º´æµÄÅÅĞòcache´óĞ¡£¬µ¥Î»ÊÇMB¡£
+æå‰è®¡ç®—å¥½ç¼“å­˜æ•°æ®ï¼Œå¯ä»¥åŠ é€Ÿè®¡ç®—
+indexCacheSize:ç¼“å­˜çš„æ’åºcacheå¤§å°ï¼Œå•ä½æ˜¯MBã€‚
 */
 void FeatureManager::preCacheData(int indexCacheSize)
 {
@@ -108,7 +109,7 @@ void FeatureManager::preCacheData(int indexCacheSize)
 	parallel_for_(Range(0, indexCacheCount), PreIndexSort(preIndexCache, sampleCount, allFeatures, sumMat, deltaMat, winWidth, winHeight));
 }
 
-//¸ù¾İ»ı·ÖÍ¼¼ÆËãÖ¸¶¨ÇøÓòµÄdeltaÖµ
+//æ ¹æ®ç§¯åˆ†å›¾è®¡ç®—æŒ‡å®šåŒºåŸŸçš„deltaå€¼
 float FeatureManager::calcDelta(cv::Mat & sum, cv::Mat & sumsq, cv::Rect & area)
 {
 	double sumV = sum.at<int>(area.y, area.x) + sum.at<int>(area.y + area.height, area.x + area.width)
@@ -116,12 +117,15 @@ float FeatureManager::calcDelta(cv::Mat & sum, cv::Mat & sumsq, cv::Rect & area)
 	double sumSq= sumsq.at<double>(area.y, area.x) + sumsq.at<double>(area.y + area.height, area.x + area.width)
 		- sumsq.at<double>(area.y, area.x + area.width) - sumsq.at<double>(area.y + area.height, area.x);
 	int N = area.width*area.height;
-	return sqrt(N*sumSq - sumV * sumV) / N;
+	float result = sqrt(N*sumSq - sumV * sumV) / N;
+	if (abs(result) < FLT_EPSILON)
+		result = 1;
+	return result;
 }
 
 void FeatureManager::getSortedSample(int featureIdx, cv::Mat & sorted)
 {
-	//Ê¹ÓÃ»º´æ
+	//ä½¿ç”¨ç¼“å­˜
 	if (featureIdx<indexCacheCount)
 	{
 		sorted = preIndexCache.row(featureIdx);
@@ -135,7 +139,7 @@ void FeatureManager::getSortedSample(int featureIdx, cv::Mat & sorted)
 	}
 	Feature& feature = allFeatures[featureIdx];
 	cv::AutoBuffer<float> fValueBuf(sampleCount);
-	//¼ÆËãËùÓĞsampleµÄfeature
+	//è®¡ç®—æ‰€æœ‰sampleçš„feature
 	for (int si = 0; si < sampleCount; si++)
 	{
 		cv::Mat sum(winHeight + 1, winWidth + 1, CV_32SC1, sumMat.ptr<int>(si));
@@ -158,7 +162,7 @@ void FeatureManager::getSumMat(int si,cv::Mat& sum)
 	sum = Mat(winHeight + 1, winWidth + 1, CV_32SC1, sumMat.ptr<int>(si));
 }
 
-//²úÉúËùÓĞµÄfeature
+//äº§ç”Ÿæ‰€æœ‰çš„feature
 void FeatureManager::genFeatures(int width, int height)
 {
 	for (int x = 0; x < width; x++)
@@ -169,30 +173,30 @@ void FeatureManager::genFeatures(int width, int height)
 			{
 				for (int dy = 1; dy <= height; dy++)
 				{
-					//AÀàfeature
+					//Aç±»feature
 					if (x + dx * 2 <= width && y + dy <= height)
 					{
-						Feature feature(1, Rect(x, y, 2 * dx, dy), -2, Rect(x + dx, y, dx, dy));
+						Feature feature(1, Rect2f(x, y, 2 * dx, dy), -2, Rect2f(x + dx, y, dx, dy));
 						allFeatures.push_back(std::move(feature));
 					}
-					//BÀàfeature
+					//Bç±»feature
 					if (x + dx <= width && y + 2 * dy <= height)
 					{
-						Feature feature(1, Rect(x, y, dx, 2 * dy), -2, Rect(x, y, dx, dy));
+						Feature feature(1, Rect2f(x, y, dx, 2 * dy), -2, Rect2f(x, y, dx, dy));
 						allFeatures.push_back(std::move(feature));
 					}
-					//CÀàfeature
+					//Cç±»feature
 					if (x + 3 * dx <= width && y + dy <= height)
 					{
-						Feature feature(1, Rect(x, y, 3 * dx, dy), -3, Rect(x + dx, y, dx, dy));
+						Feature feature(1, Rect2f(x, y, 3 * dx, dy), -3, Rect2f(x + dx, y, dx, dy));
 						allFeatures.push_back(std::move(feature));
 					}
-					//DÀàfeature
+					//Dç±»feature
 					if (x + 2 * dx <= width && y + 2 * dy <= height)
 					{
-						Feature feature(1, Rect(x, y, 2 * dx, 2 * dy),
-							-2, Rect(x + dx, y, dx, dy),
-							-2, Rect(x, y + dy, dx, dy));
+						Feature feature(1, Rect2f(x, y, 2 * dx, 2 * dy),
+							-2, Rect2f(x + dx, y, dx, dy),
+							-2, Rect2f(x, y + dy, dx, dy));
 						allFeatures.push_back(std::move(feature));
 					}
 				}

@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include <opencv2/opencv.hpp>
 
 #define MAX_RECT_COUNT 3
@@ -7,16 +7,26 @@ class Feature
 {
 public:
 	Feature();
-	Feature(float weight0, cv::Rect& rect0, float weight1, cv::Rect& rect1,
-		float weight2 = 0,cv::Rect rect2=cv::Rect());
+	Feature(float weight0, cv::Rect2f& rect0, float weight1, cv::Rect2f& rect1,
+		float weight2 = 0,cv::Rect2f rect2=cv::Rect2f());
 	~Feature();
-	//»­³öfeatureÓÃÓÚ²âÊÔ
+	//ç”»å‡ºfeatureç”¨äºŽæµ‹è¯•
 	void draw(cv::Mat& image);
 	double calc(cv::Mat& sum) const;
-private:
+	//è®¡ç®—åœ¨æŒ‡å®šåŒºåŸŸçš„featureå€¼
+	double computeNormalFeature(cv::Mat& sum, cv::Mat& sumSq, cv::Rect2f detect);
+	void save(cv::FileStorage& fs);
+	void load(cv::FileNode& node);
+
 	struct WeightRect
 	{
 		float weight;
-		cv::Rect r;
-	} rect[MAX_RECT_COUNT];                                                                                   
+		cv::Rect2f r;
+	} rect[MAX_RECT_COUNT];
+private:
+
 };
+
+Feature operator* (float x, const Feature& y);
+
+Feature operator* (const Feature& y, float x);

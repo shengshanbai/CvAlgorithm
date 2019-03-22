@@ -1,0 +1,188 @@
+<?xml version="1.0"?>
+<opencv_storage>
+<strong2>
+  <threshold>4.0928764343261719e+00</threshold>
+  <numWeak>13</numWeak>
+  <weak0>
+    <polarity>1</polarity>
+    <threshold>-5.6972589492797852e+00</threshold>
+    <alpha>1.0433715581893921e+00</alpha>
+    <feature>
+      <weight0>1.</weight0>
+      <r0>
+        8 3 3 8</r0>
+      <weight1>-3.</weight1>
+      <r1>
+        9 3 1 8</r1>
+      <weight2>0.</weight2>
+      <r2>
+        0 0 0 0</r2></feature></weak0>
+  <weak1>
+    <polarity>-1</polarity>
+    <threshold>1.3700544357299805e+01</threshold>
+    <alpha>1.1367275714874268e+00</alpha>
+    <feature>
+      <weight0>1.</weight0>
+      <r0>
+        2 3 3 8</r0>
+      <weight1>-2.</weight1>
+      <r1>
+        2 3 3 4</r1>
+      <weight2>0.</weight2>
+      <r2>
+        0 0 0 0</r2></feature></weak1>
+  <weak2>
+    <polarity>-1</polarity>
+    <threshold>1.7506496906280518e+00</threshold>
+    <alpha>1.0091632604598999e+00</alpha>
+    <feature>
+      <weight0>1.</weight0>
+      <r0>
+        1 15 6 4</r0>
+      <weight1>-2.</weight1>
+      <r1>
+        4 15 3 2</r1>
+      <weight2>-2.</weight2>
+      <r2>
+        1 17 3 2</r2></feature></weak2>
+  <weak3>
+    <polarity>1</polarity>
+    <threshold>-5.2152314186096191e+00</threshold>
+    <alpha>9.0684390068054199e-01</alpha>
+    <feature>
+      <weight0>1.</weight0>
+      <r0>
+        0 0 8 4</r0>
+      <weight1>-2.</weight1>
+      <r1>
+        4 0 4 2</r1>
+      <weight2>-2.</weight2>
+      <r2>
+        0 2 4 2</r2></feature></weak3>
+  <weak4>
+    <polarity>1</polarity>
+    <threshold>-1.4413551330566406e+01</threshold>
+    <alpha>8.4538137912750244e-01</alpha>
+    <feature>
+      <weight0>1.</weight0>
+      <r0>
+        9 7 10 8</r0>
+      <weight1>-2.</weight1>
+      <r1>
+        9 7 10 4</r1>
+      <weight2>0.</weight2>
+      <r2>
+        0 0 0 0</r2></feature></weak4>
+  <weak5>
+    <polarity>-1</polarity>
+    <threshold>1.8780375719070435e+00</threshold>
+    <alpha>7.8620266914367676e-01</alpha>
+    <feature>
+      <weight0>1.</weight0>
+      <r0>
+        6 6 3 8</r0>
+      <weight1>-3.</weight1>
+      <r1>
+        7 6 1 8</r1>
+      <weight2>0.</weight2>
+      <r2>
+        0 0 0 0</r2></feature></weak5>
+  <weak6>
+    <polarity>1</polarity>
+    <threshold>-2.2151744365692139e+00</threshold>
+    <alpha>7.5802713632583618e-01</alpha>
+    <feature>
+      <weight0>1.</weight0>
+      <r0>
+        12 15 6 4</r0>
+      <weight1>-2.</weight1>
+      <r1>
+        15 15 3 2</r1>
+      <weight2>-2.</weight2>
+      <r2>
+        12 17 3 2</r2></feature></weak6>
+  <weak7>
+    <polarity>-1</polarity>
+    <threshold>3.8547453880310059e+00</threshold>
+    <alpha>6.9423079490661621e-01</alpha>
+    <feature>
+      <weight0>1.</weight0>
+      <r0>
+        13 0 6 4</r0>
+      <weight1>-2.</weight1>
+      <r1>
+        16 0 3 2</r1>
+      <weight2>-2.</weight2>
+      <r2>
+        13 2 3 2</r2></feature></weak7>
+  <weak8>
+    <polarity>-1</polarity>
+    <threshold>1.2772499322891235e+00</threshold>
+    <alpha>7.1070331335067749e-01</alpha>
+    <feature>
+      <weight0>1.</weight0>
+      <r0>
+        13 5 6 2</r0>
+      <weight1>-2.</weight1>
+      <r1>
+        13 5 6 1</r1>
+      <weight2>0.</weight2>
+      <r2>
+        0 0 0 0</r2></feature></weak8>
+  <weak9>
+    <polarity>-1</polarity>
+    <threshold>2.1907787322998047e+00</threshold>
+    <alpha>7.1832042932510376e-01</alpha>
+    <feature>
+      <weight0>1.</weight0>
+      <r0>
+        7 13 5 2</r0>
+      <weight1>-2.</weight1>
+      <r1>
+        7 13 5 1</r1>
+      <weight2>0.</weight2>
+      <r2>
+        0 0 0 0</r2></feature></weak9>
+  <weak10>
+    <polarity>-1</polarity>
+    <threshold>9.2199449539184570e+00</threshold>
+    <alpha>7.3272311687469482e-01</alpha>
+    <feature>
+      <weight0>1.</weight0>
+      <r0>
+        9 0 6 6</r0>
+      <weight1>-2.</weight1>
+      <r1>
+        12 0 3 6</r1>
+      <weight2>0.</weight2>
+      <r2>
+        0 0 0 0</r2></feature></weak10>
+  <weak11>
+    <polarity>-1</polarity>
+    <threshold>1.0107121467590332e+00</threshold>
+    <alpha>7.3210829496383667e-01</alpha>
+    <feature>
+      <weight0>1.</weight0>
+      <r0>
+        7 11 5 2</r0>
+      <weight1>-2.</weight1>
+      <r1>
+        7 11 5 1</r1>
+      <weight2>0.</weight2>
+      <r2>
+        0 0 0 0</r2></feature></weak11>
+  <weak12>
+    <polarity>-1</polarity>
+    <threshold>-1.1394870281219482e-01</threshold>
+    <alpha>8.4805119037628174e-01</alpha>
+    <feature>
+      <weight0>1.</weight0>
+      <r0>
+        8 7 2 2</r0>
+      <weight1>-2.</weight1>
+      <r1>
+        8 7 2 1</r1>
+      <weight2>0.</weight2>
+      <r2>
+        0 0 0 0</r2></feature></weak12></strong2>
+</opencv_storage>

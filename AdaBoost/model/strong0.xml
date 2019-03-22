@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<opencv_storage>
+<strong0>
+  <threshold>1.7034485340118408e+00</threshold>
+  <numWeak>6</numWeak>
+  <weak0>
+    <polarity>1</polarity>
+    <threshold>-4.4378046989440918e+00</threshold>
+    <alpha>1.7533513307571411e+00</alpha>
+    <feature>
+      <weight0>1.</weight0>
+      <r0>
+        8 3 3 10</r0>
+      <weight1>-3.</weight1>
+      <r1>
+        9 3 1 10</r1>
+      <weight2>0.</weight2>
+      <r2>
+        0 0 0 0</r2></feature></weak0>
+  <weak1>
+    <polarity>-1</polarity>
+    <threshold>4.1981986999511719e+01</threshold>
+    <alpha>1.4591594934463501e+00</alpha>
+    <feature>
+      <weight0>1.</weight0>
+      <r0>
+        0 3 19 6</r0>
+      <weight1>-2.</weight1>
+      <r1>
+        0 3 19 3</r1>
+      <weight2>0.</weight2>
+      <r2>
+        0 0 0 0</r2></feature></weak1>
+  <weak2>
+    <polarity>-1</polarity>
+    <threshold>2.4849565029144287e+00</threshold>
+    <alpha>9.4850790500640869e-01</alpha>
+    <feature>
+      <weight0>1.</weight0>
+      <r0>
+        1 15 6 4</r0>
+      <weight1>-2.</weight1>
+      <r1>
+        4 15 3 2</r1>
+      <weight2>-2.</weight2>
+      <r2>
+        1 17 3 2</r2></feature></weak2>
+  <weak3>
+    <polarity>1</polarity>
+    <threshold>-1.3802077770233154e+00</threshold>
+    <alpha>9.1518789529800415e-01</alpha>
+    <feature>
+      <weight0>1.</weight0>
+      <r0>
+        14 9 2 6</r0>
+      <weight1>-2.</weight1>
+      <r1>
+        14 9 2 3</r1>
+      <weight2>0.</weight2>
+      <r2>
+        0 0 0 0</r2></feature></weak3>
+  <weak4>
+    <polarity>1</polarity>
+    <threshold>-2.3162581920623779e+00</threshold>
+    <alpha>8.4656411409378052e-01</alpha>
+    <feature>
+      <weight0>1.</weight0>
+      <r0>
+        0 0 8 1</r0>
+      <weight1>-2.</weight1>
+      <r1>
+        4 0 4 1</r1>
+      <weight2>0.</weight2>
+      <r2>
+        0 0 0 0</r2></feature></weak4>
+  <weak5>
+    <polarity>-1</polarity>
+    <threshold>3.5552804470062256e+00</threshold>
+    <alpha>7.5494056940078735e-01</alpha>
+    <feature>
+      <weight0>1.</weight0>
+      <r0>
+        3 11 8 4</r0>
+      <weight1>-2.</weight1>
+      <r1>
+        7 11 4 2</r1>
+      <weight2>-2.</weight2>
+      <r2>
+        3 13 4 2</r2></feature></weak5></strong0>
+</opencv_storage>

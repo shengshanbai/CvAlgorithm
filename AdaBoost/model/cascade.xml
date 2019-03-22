@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<opencv_storage>
+<cascade>
+  <stage>20</stage>
+  <winSize>
+    19 19</winSize></cascade>
+</opencv_storage>

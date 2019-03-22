@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "WeakClassifer.h"
 #include <opencv2/opencv.hpp>
 #include "WeakClassifer.h"
@@ -10,17 +10,20 @@ public:
 	StrongClassifer();
 	~StrongClassifer();
 	bool train(int posCount,int negCount,FeatureManager& featureManager);
-	char predict(int si);
+	int predict(int si);
+	int predict(cv::Mat& sum, cv::Mat& sumSq, cv::Rect2f detect, float sizeScale);
 	void updateWeight(cv::Ptr<WeakClassifer> weakClassifer, FeatureManager& featureManager);
 	void setMinHitRate(float rate) { minHitRate = rate; }
 	void setMaxFARate(float rate) { maxFARate = rate; }
+	void save(cv::FileStorage& fs);
+	void load(cv::FileNode& fnode);
 private:
 	float weakSum(int si);
-	bool isErrDesired();
+	bool isErrDesired(FeatureManager& featureManager);
 	std::vector<cv::Ptr<WeakClassifer>> weaks;
 	cv::Mat weight;
-	float minHitRate=0.99;//×îĞ¡ÕÙ»ØÂÊ
-	float maxFARate=0.5;//×î´óÎó±¨ÂÊ
+	float minHitRate=0.994;//æœ€å°å¬å›ç‡
+	float maxFARate=0.5;//æœ€å¤§è¯¯æŠ¥ç‡
 	float threshold = 0;
 	int posCount, negCount;
 };

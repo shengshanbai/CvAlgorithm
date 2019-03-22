@@ -1,39 +1,59 @@
-#include <iostream>
+﻿#include <iostream>
 #include <opencv2/opencv.hpp>
 #include <vector>
 #include "Feature.h"
-#include "ImageReader.h"
+#include "imagestorage.h"
 #include "CascadeClassifer.h"
 #include "FeatureManager.h"
 
 using namespace std;
 using namespace cv;
 
-#define POSDIR "E:\\Projects\\Face-Detection\\faces"
-#define NEGDIR "E:\\Projects\\Face-Detection\\nonfaces"
-#define WIN_W 20
-#define WIN_H 20
-#define POSCOUNT 500
-#define NEGCOUNT 500
+#define FACE_VEC "E:\\dataset\\boostImages\\face.vec"
+#define NON_FACE_INFO "E:\\dataset\\boostImages\\nface.txt"
+#define MODEL_DIR "E:\\Projects\\CvAlgorithm\\AdaBoost\\model"
+#define TEST_FILE "E:\\Projects\\FaceDetection\\FaceDetection\\Test\\2.jpg"
+
+#define WIN_W 19
+#define WIN_H 19
+#define POSCOUNT 4000
+#define NEGCOUNT 4000
+
+int train() 
+{
+	CvCascadeImageReader imgReader;
+	if (!imgReader.create(FACE_VEC, NON_FACE_INFO, Size(WIN_W, WIN_H)))
+	{
+		cout << "Image reader can not be created from vec " << FACE_VEC
+			<< " and bg " << NON_FACE_INFO << "." << endl;
+		return 2;
+	}
+	FeatureManager featureManager(WIN_W, WIN_H);
+	CascadeClassifer classifer;
+	classifer.train(20, imgReader, featureManager, POSCOUNT, NEGCOUNT, 0.0001f, MODEL_DIR);
+	return 0;
+}
 
 int main()
 {
 	setNumThreads(8);
-	ImageReader reader(POSDIR, NEGDIR);
-	FeatureManager featureManager(WIN_W, WIN_H);
+	//train();
 	CascadeClassifer classifer;
-	classifer.train(2, reader, featureManager,POSCOUNT,NEGCOUNT);
-	int negCout = 0;
-	for (int i = 0; i < POSCOUNT+NEGCOUNT; i++)
+	classifer.load(MODEL_DIR);
+	Mat image = imread(TEST_FILE);
+	Mat gray;
+	cvtColor(image, gray, COLOR_BGR2GRAY);
+	vector<Rect> faces;
+	bool detect=classifer.predict(gray, faces);
+	if (detect)
 	{
-		char label = classifer.predict(i);
-		if (label!=featureManager.getLable(i))
+		for (auto& face : faces)
 		{
-			negCout++;
+			rectangle(image, face, Scalar(0, 0, 255));
 		}
 	}
-	cout << "the strong err ratio:" << (float)negCout/(POSCOUNT + NEGCOUNT);
-	char temp;
-	cin >> temp;
+	imshow("face", image);
+	waitKey();
+	destroyAllWindows();
 	return 0;
 }
